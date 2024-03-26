@@ -4,6 +4,14 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 
+import dotenv from 'dotenv'
+import path from 'path';
+
+dotenv.config({ path: path.resolve('../.env') })
+
+const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL
+const aws_url = process.env.NEXT_PUBLIC_AWS_URL
+
 // Set the worker that does the heavy lifting of displaying pdf
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
@@ -33,17 +41,15 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
 
   const handleExtractPages = async () => {
 
-    console.log("Selected pages : ", selectedPages) // Debugging
-
     try {
 
-      const response = await axios.post('http://localhost:4000/api/extract-pages', {
-        originalPdfPath: originalPdfUrl.split('http://localhost:4000/')[1],
+      const response = await axios.post(`${backend_url}api/extract-pages`, {
+        originalPdfPath: originalPdfUrl.split(`${aws_url}`)[1],
         selectedPages,
       });
 
       if (response.status === 200) {
-        const generatedPdfUrl = `http://localhost:4000/${response.data.filePath}`;
+        const generatedPdfUrl = `${response.data.filePath}`;
         setGeneratedPdfUrl(generatedPdfUrl)
         setIsGeneratedPdfUploaded(false)
 
@@ -64,12 +70,17 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
         <Document
           file={originalPdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
-        // className = " w-1/4"
         >
           {console.log("Printing original pdf", originalNumPages)}
 
           {Array.from(new Array(originalNumPages), (el, index) => (
             <div key={`page_${index + 1}`} className="flex items-center ">
+              <input
+                type="checkbox"
+                className="form-checkbox w-10 h-10 mx-5 "
+                checked={selectedPages.includes(index + 1)}
+                onChange={() => handlePageSelect(index + 1)}
+              />
               <div
                 onClick={() => handlePageSelect(index + 1)}
               >
@@ -78,12 +89,7 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
                   className="mb-5"
                 />
               </div>
-              <input
-                type="checkbox"
-                className="form-checkbox w-10 h-10 mx-5 "
-                checked={selectedPages.includes(index + 1)}
-                onChange={() => handlePageSelect(index + 1)}
-              />
+              
             </div>
           ))}
 

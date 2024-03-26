@@ -1,6 +1,7 @@
 import React from 'react';
 
 const UploadForm = ({ handleFileChange, handleSubmit }) => {
+  
  return (
     <div className = "bg-gray-800 mt-20 w-2/3">
       <form 

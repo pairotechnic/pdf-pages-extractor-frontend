@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
     "next": "14.1.1",
+    "path": "^0.12.7",
     "pdfjs-dist": "^3.11.174",
     "raw-loader": "^4.0.2",
     "react": "^18",

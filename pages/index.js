@@ -3,8 +3,15 @@ import axios from 'axios';
 import UploadForm from '@/components/UploadForm';
 import GeneratedPdfViewer from '@/components/GeneratedPdfViewer';
 import OriginalPdfViewer from '@/components/OriginalPdfViewer';
+import dotenv from 'dotenv'
+import path from 'path';
+
+dotenv.config({ path: path.resolve('../.env') })
+
+const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL
 
 const Index = () => {
+
   const [file, setFile] = useState(null);
   const [originalPdfUrl, setOriginalPdfUrl] = useState('');
   const [selectedPages, setSelectedPages] = useState([]) // Lifted the state to be able to reset checkboxes when new PDF is uploaded
@@ -26,7 +33,7 @@ const Index = () => {
     formData.append('pdf', file);
 
     try {
-      const response = await axios.post('http://localhost:4000/api/upload', formData, {
+      const response = await axios.post(`${backend_url}api/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -34,7 +41,7 @@ const Index = () => {
 
       if (response.status === 200) {
         const filePath = response.data.filePath;
-        const fullUrl = `http://localhost:4000/${filePath}`;
+        const fullUrl = `${filePath}`;
         setOriginalPdfUrl(fullUrl);
         setIsGeneratedPdfUploaded(true)
       } else {
@@ -58,8 +65,7 @@ const Index = () => {
       />
 
       <div className="text-3xl text-white mt-20 leading-loose">
-        Click on pages to select them for extraction. <br/>
-        {/* The new PDF will display pages in the order you selected them in. */}
+        Click on pages to select them for extraction. <br />
       </div>
 
       <div className="flex flex-row justify-between my-20 bg-gray-700 ">
