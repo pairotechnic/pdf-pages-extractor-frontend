@@ -50,7 +50,9 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
 
       if (response.status === 200) {
         const generatedPdfUrl = `${response.data.filePath}`;
+
         setGeneratedPdfUrl(generatedPdfUrl)
+        console.log("generatedPdfUrl has been set to : ", generatedPdfUrl)
         setIsGeneratedPdfUploaded(false)
 
       } else {

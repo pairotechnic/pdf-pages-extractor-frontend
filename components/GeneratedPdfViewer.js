@@ -22,9 +22,15 @@ const GeneratedPdfViewer = ({ generatedPdfUrl }) => {
       const blob = new Blob([response.data], { type: 'application/pdf ' })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
-      const filename = generatedPdfUrl.split('/').pop() // We extract the filename from the generatedPdfUrl
+
+      // We extract the filename from the generatedPdfUrl
+      const filename = generatedPdfUrl.split('/').pop() 
+
+      // We decode the extracted filename
+      const decodedFilename = decodeURIComponent(filename)
+
       link.href = url
-      link.setAttribute('download', filename) // We use the extracted filename here
+      link.setAttribute('download', decodedFilename) // We use the decoded extracted filename here
       document.body.appendChild(link)
       link.click()
       link.parentNode.removeChild(link)
@@ -35,7 +41,7 @@ const GeneratedPdfViewer = ({ generatedPdfUrl }) => {
 
   return (
     <div className="flex flex-col justify-center items-center  px-10 py-10  ">
-      <div className = "text-4xl mb-10">Generated PDF</div>
+      <div className="text-4xl mb-10">Generated PDF</div>
       <div className="overflow-auto h-screen ">
         <Document
           file={generatedPdfUrl}
