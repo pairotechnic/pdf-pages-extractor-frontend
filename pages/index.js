@@ -6,7 +6,7 @@ import OriginalPdfViewer from '@/components/OriginalPdfViewer';
 import dotenv from 'dotenv'
 import path from 'path';
 
-dotenv.config({ path: path.resolve('../.env') })
+// dotenv.config({ path: path.resolve('../.env') }) // Only used during development
 
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL
 
@@ -68,17 +68,22 @@ const Index = () => {
         Click on pages to select them for extraction. <br />
       </div>
 
-      <div className="flex flex-row justify-between my-20 bg-gray-700 ">
+      <div className="h-screen " >
 
-        {originalPdfUrl && <OriginalPdfViewer
-          originalPdfUrl={originalPdfUrl}
-          resetSelection={resetSelection}
-          selectedPages={selectedPages} setSelectedPages={setSelectedPages}
-          setIsGeneratedPdfUploaded={setIsGeneratedPdfUploaded}
-          setGeneratedPdfUrl={setGeneratedPdfUrl}
-        />}
+        <div className="flex flex-row justify-between my-20 bg-gray-700 h-5/6" >
 
-        {!isGeneratedPdfUploaded && generatedPdfUrl && <GeneratedPdfViewer generatedPdfUrl={generatedPdfUrl} />}
+          {originalPdfUrl && <OriginalPdfViewer
+            originalPdfUrl={originalPdfUrl}
+            resetSelection={resetSelection}
+            selectedPages={selectedPages} setSelectedPages={setSelectedPages}
+            setIsGeneratedPdfUploaded={setIsGeneratedPdfUploaded}
+            setGeneratedPdfUrl={setGeneratedPdfUrl}
+
+          />}
+
+          {!isGeneratedPdfUploaded && generatedPdfUrl && <GeneratedPdfViewer generatedPdfUrl={generatedPdfUrl} />}
+
+        </div>
 
       </div>
 

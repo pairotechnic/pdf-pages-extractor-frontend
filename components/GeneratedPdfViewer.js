@@ -24,7 +24,7 @@ const GeneratedPdfViewer = ({ generatedPdfUrl }) => {
       const link = document.createElement('a')
 
       // We extract the filename from the generatedPdfUrl
-      const filename = generatedPdfUrl.split('/').pop() 
+      const filename = generatedPdfUrl.split('/').pop()
 
       // We decode the extracted filename
       const decodedFilename = decodeURIComponent(filename)
@@ -40,19 +40,28 @@ const GeneratedPdfViewer = ({ generatedPdfUrl }) => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center  px-10 py-10  ">
+    <div className="flex flex-col justify-center items-center  px-10 py-10 ">
       <div className="text-4xl mb-10">Generated PDF</div>
-      <div className="overflow-auto h-screen ">
+      <div className="overflow-auto ">
         <Document
           file={generatedPdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
         >
           {Array.from(new Array(newNumPages), (el, index) => (
-            <Page
+            // <Page
+            //   key={`page_${index + 1}`}
+            //   pageNumber={index + 1}
+            //   className="mb-5 "
+            // />
+            <div
               key={`page_${index + 1}`}
-              pageNumber={index + 1}
-              className="mb-5"
-            />
+            >
+              <Page
+                pageNumber={index + 1}
+                className="mb-5 "
+                scale = {0.5}
+              />
+            </div>
           ))}
         </Document>
       </div>

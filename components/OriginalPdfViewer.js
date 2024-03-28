@@ -7,7 +7,7 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import dotenv from 'dotenv'
 import path from 'path';
 
-dotenv.config({ path: path.resolve('../.env') })
+// dotenv.config({ path: path.resolve('../.env') }) // Only used during development
 
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL
 const aws_url = process.env.NEXT_PUBLIC_AWS_URL
@@ -18,6 +18,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setSelectedPages, setIsGeneratedPdfUploaded, setGeneratedPdfUrl }) => {
 
   const [originalNumPages, setOriginalNumPages] = useState(null);
+
   const pdfContainerRef = useRef(null) // Create a ref for the PDF container
 
   useEffect(() => {
@@ -25,8 +26,8 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
   }, [originalPdfUrl, resetSelection])
 
   useEffect(() => { // This useEffect will scroll the container into view when originalPdfUrl changes
-    if(pdfContainerRef.current){
-      pdfContainerRef.current.scrollIntoView({behavior : 'smooth'})
+    if (pdfContainerRef.current) {
+      pdfContainerRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [originalPdfUrl])
 
@@ -72,9 +73,10 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
   };
 
   return (
-    <div className="flex flex-col justify-center items-center  px-10 py-10  " ref = {pdfContainerRef}>
+    <div className="flex flex-col justify-center items-center  px-10 py-10  " ref={pdfContainerRef}>
+
       <div className="text-4xl mb-10">Original PDF</div>
-      <div className="overflow-auto h-screen ">
+      <div className="overflow-auto ">
 
         <Document
           file={originalPdfUrl}
@@ -86,7 +88,7 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
             <div key={`page_${index + 1}`} className="flex items-center ">
               <input
                 type="checkbox"
-                className="form-checkbox w-10 h-10 mx-5 "
+                className="form-checkbox w-5 h-5 mx-5 "
                 checked={selectedPages.includes(index + 1)}
                 onChange={() => handlePageSelect(index + 1)}
               />
@@ -96,9 +98,10 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
                 <Page
                   pageNumber={index + 1}
                   className="mb-5"
+                  scale={0.5}
                 />
               </div>
-              
+
             </div>
           ))}
 
