@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
@@ -18,10 +18,17 @@ pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setSelectedPages, setIsGeneratedPdfUploaded, setGeneratedPdfUrl }) => {
 
   const [originalNumPages, setOriginalNumPages] = useState(null);
+  const pdfContainerRef = useRef(null) // Create a ref for the PDF container
 
   useEffect(() => {
     resetSelection()// Reset the selection when the component mounts, or when the originalPdfUrl changes
   }, [originalPdfUrl, resetSelection])
+
+  useEffect(() => { // This useEffect will scroll the container into view when originalPdfUrl changes
+    if(pdfContainerRef.current){
+      pdfContainerRef.current.scrollIntoView({behavior : 'smooth'})
+    }
+  }, [originalPdfUrl])
 
   function onDocumentLoadSuccess({ numPages }) {
     setOriginalNumPages(numPages)
@@ -65,7 +72,7 @@ const OriginalPdfViewer = ({ originalPdfUrl, resetSelection, selectedPages, setS
   };
 
   return (
-    <div className="flex flex-col justify-center items-center  px-10 py-10  ">
+    <div className="flex flex-col justify-center items-center  px-10 py-10  " ref = {pdfContainerRef}>
       <div className="text-4xl mb-10">Original PDF</div>
       <div className="overflow-auto h-screen ">
 
